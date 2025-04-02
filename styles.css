@@ -1,0 +1,28 @@
+body { background-color: #f8f9fa; }
+/* .container { max-width: 800px; margin-top: 50px; } */
+footer { background: #343a40; color: white; padding: 20px 0; text-align: center; margin-top: 50px; }
+.hero { background: linear-gradient(135deg, #007bff, #6610f2); color: white; padding: 80px 20px; text-align: center; }
+.hero h1 { font-size: 2.8rem; font-weight: bold; }
+.hero p { font-size: 1.2rem; }
+.hero .btn { font-size: 1.2rem; padding: 12px 25px; margin-top: 15px; }
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+.card:hover { transform: translateY(-5px); }
+.screenshot { text-align: center; margin: 40px 0; }
+.screenshot img { max-width: 80%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
+/* footer { background: #343a40; color: white; padding: 20px 0; text-align: center; } */
+/* Navbar */
+.navbar-toggler { border-color: rgba(255, 255, 255, 0.5); }
+/* .navbar-toggler-icon { background-color: white; } */
+.navbar-brand img { height: 40px; margin-right: 10px; }
+
+#menu-link {
+            color: white;
+            /* background: linear-gradient(135deg, #007bff, #6610f2); color: white; padding: 0px 20px; text-align: center;         */
+}
+#menu-link:hover{
+    color: rgb(51, 34, 112);
+}
