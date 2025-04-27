@@ -11,15 +11,15 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
             <a class="navbar-brand" href="index.html" id="menu-link">
-                <img src="logo.png" alt="Inbox Sweeper" class="card">Inbox Sweeper.xyz
+                <img src="logo.png" alt="Inbox Sweeper" class="card">InboxSweeper.xyz
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" id="menu-link" href="privacy.html">Privacy Policy for Inbox Sweeper Extension</a></li>
-                    <li class="nav-item"><a class="nav-link" id="menu-link" href="terms.html">Terms of Service for Inbox Sweeper Extension</a></li>
+                    <li class="nav-item"><a class="nav-link" id="menu-link" href="Privacy Policy.html">Privacy Policy for InboxSweeper.xyz</a></li>
+                    <li class="nav-item"><a class="nav-link" id="menu-link" href="Terms of Service.html">Terms of Service for InboxSweeper.xyz</a></li>
                     <li class="nav-item"><a class="nav-link" id="menu-link" href="#Contact">Contact</a></li>
                 </ul>
             </div>
@@ -39,10 +39,11 @@
                     <h3>Why Use Inbox Sweeper?</h3>
                     <p>Inbox Sweeper helps you keep your Gmail organized effortlessly with advanced filtering and automation.</p>
                     <ul>
-                        <li>Extract unique emails</li>
-                        <li>Delete all emails of selected email</li>
-                        <li>Export unique email IDs as CSV</li>
+                        <li>Extract unique email IDs</li>
+                        <li>Delete all emails of selected email ID</li>
+                        <li>Export all unique email IDs as CSV</li>
                         <li>Checkbox option to filter emails and bulk actions</li>
+                        <li>Find and display unsubscribe links</li>
                     </ul>
                 </div>
             </div>
@@ -51,9 +52,10 @@
                     <h3>Why Does Inbox Sweeper Need Gmail Access?</h3>
                     <p>Inbox Sweeper uses Google OAuth 2.0 authentication to access your Gmail inbox. We only request the minimum permissions required for:</p>
                     <ul>
-                        <li>Filtering and managing emails</li>
+                        <li>Extracting and managing emails</li>
                         <li>Bulk deleting selected emails</li>
                         <li>Exporting email lists for better organization</li>
+                        <li>For bulk unsubscribing from unwanted emails</li>
                     </ul>
                     <p><strong>We do not store, share, or sell your email data.</strong> All data is processed locally.</p>
                 </div>
@@ -61,20 +63,42 @@
         </div>
     </div>
 
-    <div class="container screenshot">
+    <!-- <div class="container screenshot">
         <h2>📸 Inbox Sweeper Extension Preview</h2>
         <p>Below is a preview of the Inbox Sweeper extension interface, highlighting its key buttons and features:</p>
         <img src="Home Screen.png" alt="Inbox Sweeper Chrome Extension Interface with Option Button">        
-    </div>
+    </div> -->
+    <div class="container screenshot">
+        <h2>📸 Inbox Sweeper Extension Preview and Demo Video</h2>
+        <p>Below is a preview of the Inbox Sweeper extension interface and demo video, highlighting its key buttons and features:</p>
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <img src="Home Screen.png" alt="Inbox Sweeper Chrome Extension Interface with Option Button" class="img-fluid rounded shadow">
+            </div>
+            <div class="col-md-6">
+                <div class="ratio ratio-16x9">
+                    <iframe 
+                        src="https://www.youtube.com/embed/oNz4M-eD6ZU" 
+                        title="Inbox Sweeper Walkthrough" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>    
     <div class="container my-5">   
         <div class="card p-4 mt-4">
             <h3>🛠️ Button Functionality</h3>
             <ul>
                 <!-- <li><strong>🔍 Search Bar:</strong> Enter keywords to filter and search emails in your Gmail inbox.</li> -->
-                <li><strong>📥 Extract Unique Emails:</strong> Finds and lists all unique email IDs in your inbox.</li>
-                <li><strong>🗑 Delete All Emails of Selected Email:</strong> Moves all emails from the selected sender to Trash (requires confirmation).</li>
-                <li><strong>📂 Export Unique Emails as CSV:</strong> Generates a CSV file with all unique email IDs.</li>
+                <li><strong>📥 Extract Unique Email IDs:</strong> Finds and lists all unique email IDs in your inbox.</li>
+                <li><strong>🗑 Delete All Emails of Selected Email ID:</strong> Moves all emails from the selected sender to Trash (requires confirmation).</li>
+                <li><strong>📂 Export Unique Email IDs as CSV:</strong> Generates a CSV file with all unique email IDs.</li>
                 <li><strong>⚪ Option Button (Radio Button):</strong> Select specific email ID to filter emails and apply actions.</li>
+                <li><strong>📤 Extract and Display Unsubscribe Links:</strong> Finds unsubscribe links from emails and lets you quickly opt out with a single click.</li>
+                <li><strong>📜 View Logs:</strong> See a list of all email actions like extraction and deletion recorded securely.</li>
+                <li><strong>🧹 Clear Access Logs:</strong> Instantly wipe all stored access logs to maintain privacy and free up space.</li>
+                <li><strong>📥 Download Logs as CSV:</strong> Export all access logs into a CSV file for easy backup or review.</li>
             </ul>
         </div>
     </div>
@@ -89,7 +113,7 @@
     <footer>
         <p>&copy; 2025 Inbox Sweeper. All Rights Reserved. | 
             <a href="privacy.html" class="text-light">Privacy Policy</a> | 
-            <a href="Terms of Service.html" class="text-light">Terms of Service</a></p>
+            <a href="terms.html" class="text-light">Terms of Service</a></p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
