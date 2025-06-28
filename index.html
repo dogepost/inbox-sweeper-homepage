@@ -1,138 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inbox Sweeper - Gmail Management Chrome Extension</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inbox Sweeper - Gmail Management Chrome Extension</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="index.html" id="menu-link">
-                <img src="GP-logo.png" alt="GetPost" class="rounded">GetPost
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" id="menu-link" href="Privacy Policy.html">Privacy Policy for InboxSweeper.xyz</a></li>
-                    <li class="nav-item"><a class="nav-link" id="menu-link" href="Terms of Service.html">Terms of Service for InboxSweeper.xyz</a></li>
-                    <li class="nav-item"><a class="nav-link" id="menu-link" href="#Contact">Contact</a></li>
-                </ul>
-            </div>
+
+  <!-- 🌐 Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="index.html" id="menu-link">
+      <img src="GP-logo.png" alt="GetPost Logo" class="rounded me-2" style="height: 40px;" />
+      <span class="fw-bold fs-5">GetPost</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link fw-medium text-white" href="Privacy Policy.html">Privacy Policy</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link fw-medium text-white" href="Terms of Service.html">Terms of Service</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link fw-medium text-white" href="#Contact">Contact</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- 🧩 About Section -->
+<section class="hero text-center py-5" id="about">
+  <div class="container">
+    <h2 class="fw-bold mb-3 display-5">About GetPost</h2>
+    <p class="lead mx-auto" style="max-width: 800px;">
+      At <strong>GetPost</strong>, we build lightweight, secure Chrome extensions that optimize your Gmail workflow.
+      From inbox cleanup to WhatsApp automation, our tools are privacy-first and productivity-focused.
+    </p>
+  </div>
+</section>
+
+<!-- 🚀 Extension Promo Section -->
+<section class="hero text-center py-5">
+  <div class="container">
+    <img src="logo.png" alt="Inbox Sweeper Logo" class="mb-4 rounded shadow-sm" style="width: 100px; height: auto;" />
+    <h1 class="fw-bold display-4">Inbox Sweeper - Chrome Extension</h1>
+    <p class="lead mb-4">Organize, clean, and automate Gmail with one click.</p>
+    <a href="https://chrome.google.com/webstore/detail/cgilkgbbgifiihobhmiolkfedmkonion" target="_blank" class="btn btn-light btn-lg shadow-sm px-4 py-2">
+      🌟 Get the Extension
+    </a>
+  </div>
+</section>
+
+  <!-- Features Section -->
+  <div class="container my-5">
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="card p-4 h-100">
+          <h4>Why Use Inbox Sweeper?</h4>
+          <p>Advanced automation to keep Gmail clean and clutter-free.</p>
+          <ul>
+            <li>Extract unique email IDs</li>
+            <li>Bulk delete by email ID</li>
+            <li>Export email IDs to CSV</li>
+            <li>Filter emails via checkbox</li>
+            <li>Show unsubscribe links</li>
+            <li>Convert new emails to PDF and send to WhatsApp</li>
+          </ul>
         </div>
-    </nav>
-    <section id="about" class="hero text-center py-5">
-        <div class="container">
-          <h2 class="fw-bold mb-3">About GetPost</h2>
-          <p class="lead">
-            At GetPost, we specialize in building Chrome extensions that make Gmail, browsing, and productivity tools more efficient.
-            From smart inbox managers to automation plugins, our solutions are built with privacy, performance, and simplicity in mind.
-          </p>
+      </div>
+      <div class="col-md-6">
+        <div class="card p-4 h-100">
+          <h4>Why Does It Need Gmail Access?</h4>
+          <p>Secure OAuth 2.0 used to fetch your Gmail data locally for:</p>
+          <ul>
+            <li>Email analysis & filtering</li>
+            <li>Bulk email actions</li>
+            <li>Unsubscribe link extraction</li>
+          </ul>
+          <p><strong>No data stored. Everything happens locally.</strong></p>
         </div>
-      </section>
-    <div class="hero text-center py-5">
-        <img src="logo.png" alt="InboxSweeper" class="mb-4 rounded" style="width: 10%; height: auto; object-fit: cover;">
-        <h1>Inbox Sweeper - Chrome Extension</h1>
-        <p class="lead">Easily manage and clean your Gmail inbox with Inbox Sweeper.</p>
-        <a href="https://chrome.google.com/webstore/detail/cgilkgbbgifiihobhmiolkfedmkonion" class="btn btn-light btn-lg">Get the Extension</a>
+      </div>
     </div>
 
-    <div class="container my-5">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card p-4">
-                    <h3>Why Use Inbox Sweeper?</h3>
-                    <p>Inbox Sweeper helps you keep your Gmail organized effortlessly with advanced filtering and automation.</p>
-                    <ul>
-                        <li>Extract unique email IDs</li>
-                        <li>Delete all emails of selected email ID</li>
-                        <li>Export all unique email IDs as CSV</li>
-                        <li>Checkbox option to filter emails and bulk actions</li>
-                        <li>Find and display unsubscribe links</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card p-4">
-                    <h3>Why Does Inbox Sweeper Need Gmail Access?</h3>
-                    <p>Inbox Sweeper uses Google OAuth 2.0 authentication to access your Gmail inbox. We only request the minimum permissions required for:</p>
-                    <ul>
-                        <li>Extracting and managing emails</li>
-                        <li>Bulk deleting selected emails</li>
-                        <li>Exporting email lists for better organization</li>
-                        <li>For bulk unsubscribing from unwanted emails</li>
-                    </ul>
-                    <p><strong>We do not store, share, or sell your email data.</strong> All data is processed locally.</p>
-                </div>
-            </div>
-        </div>
+    <!-- Feature Highlights -->
+    <div class="feature-block">
+      <span class="badge">✨ Core Feature</span>
+      <h4>Automated Gmail to WhatsApp PDF</h4>
+      <p>Monitors your inbox and converts emails to PDFs sent directly to your verified WhatsApp using the <strong>WhatsApp Cloud API</strong>.</p>
     </div>
 
-    <!-- <div class="container screenshot">
-        <h2>📸 Inbox Sweeper Extension Preview</h2>
-        <p>Below is a preview of the Inbox Sweeper extension interface, highlighting its key buttons and features:</p>
-        <img src="Home Screen.png" alt="Inbox Sweeper Chrome Extension Interface with Option Button">        
-    </div> -->
-    <div class="container screenshot text-center">
-        <h2>📸 Inbox Sweeper Extension Preview and Demo Video</h2>
-        <p>Below is a preview of the Inbox Sweeper extension interface and demo video, highlighting its key buttons and features:</p>
-        
-        <div class="row justify-content-center align-items-center mt-4 g-4">
-          <div class="col-md-6">
-            <img src="Home Screen.png" alt="Inbox Sweeper Chrome Extension Interface with Option Button" class="img-fluid rounded shadow">
-          </div>
-          <div class="col-md-6">
-            <div class="ratio ratio-16x9">
-              <iframe 
-                src="https://www.youtube.com/embed/47inPJ_30so" 
-                title="Inbox Sweeper Walkthrough" 
-                allowfullscreen>
-              </iframe>
-            </div>
+    <div class="feature-block">
+      <span class="badge">🔒 Secure Verification</span>
+      <h4>OTP-Based Mobile Verification</h4>
+      <p>Verifies your WhatsApp number before PDF delivery using a 4-digit OTP via WhatsApp itself.</p>
+    </div>
+
+    <div class="feature-block">
+      <span class="badge">📑 Smart PDF Generator</span>
+      <h4>PDF Formatting</h4>
+      <ul>
+        <li>Uses <code>html2canvas</code> and <code>jsPDF</code></li>
+        <li>Captures sender, subject, date, and attachments</li>
+        <li>Mobile-friendly A4 layout</li>
+        <li>Clean footer branding</li>
+      </ul>
+    </div>
+
+    <div class="feature-block">
+      <span class="badge">⚙️ Customization</span>
+      <h4>Filters and Scheduling</h4>
+      <ul>
+        <li>Filter by sender or subject</li>
+        <li>Set auto-delivery intervals</li>
+        <li>Enable/disable WhatsApp delivery</li>
+      </ul>
+    </div>
+
+    <div class="feature-block">
+      <span class="badge">🔐 Privacy First</span>
+      <h4>Secure API Integration</h4>
+      <ul>
+        <li>Encrypted WhatsApp token storage</li>
+        <li>No third-party data sharing</li>
+        <li>Direct communication with Cloud API</li>
+      </ul>
+    </div>
+
+    <div class="feature-block">
+      <span class="badge">🌐 Cloudflare Protected</span>
+      <h4>Secure Token Proxy</h4>
+      <p>Inbox Sweeper fetches tokens securely via Cloudflare Worker to avoid client-side token exposure.</p>
+    </div>
+
+    <div class="feature-block">
+      <span class="badge">🔔 Real-Time Triggers</span>
+      <h4>Background Monitoring</h4>
+      <p>Uses Chrome alarms API to watch Gmail with minimal performance impact. Stops auto-delivery when not verified.</p>
+    </div>
+
+    <!-- Preview and Demo -->
+    <div class="feature-block">
+      <div class="text-center mb-4">
+        <h4>📸 Inbox Sweeper Extension Preview & Demo</h4>
+        <p>See Inbox Sweeper in action — from Gmail detection to WhatsApp PDF delivery.</p>
+      </div>
+      <div class="d-flex flex-wrap justify-content-center align-items-start gap-4">
+        <div style="flex: 1 1 300px; max-width: 450px;">
+          <img src="Home Screen.png" alt="Inbox Sweeper Interface" class="img-fluid rounded shadow" />
+        </div>
+        <div style="flex: 1 1 300px; max-width: 600px;">
+          <div class="ratio ratio-16x9 rounded shadow">
+            <iframe 
+              src="https://www.youtube.com/embed/47inPJ_30so"
+              title="Inbox Sweeper Demo"
+              allowfullscreen>
+            </iframe>
           </div>
         </div>
       </div>
-
-    <div class="container my-5">   
-        <div class="card p-4 mt-4">
-            <h3>🛠️ Button Functionality</h3>
-            <ul>
-                <!-- <li><strong>🔍 Search Bar:</strong> Enter keywords to filter and search emails in your Gmail inbox.</li> -->
-                <li><strong>📥 Extract Unique Email IDs:</strong> Finds and lists all unique email IDs in your inbox.</li>
-                <li><strong>🗑 Delete All Emails of Selected Email ID:</strong> Moves all emails from the selected sender to Trash (requires confirmation).</li>
-                <li><strong>📂 Export Unique Email IDs as CSV:</strong> Generates a CSV file with all unique email IDs.</li>
-                <li><strong>⚪ Option Button (Radio Button):</strong> Select specific email ID to filter emails and apply actions.</li>
-                <li><strong>📤 Extract and Display Unsubscribe Links:</strong> Finds unsubscribe links from emails and lets you quickly opt out with a single click.</li>
-                <li><strong>📜 View Logs:</strong> See a list of all email actions like extraction and deletion recorded securely.</li>
-                <li><strong>🧹 Clear Access Logs:</strong> Instantly wipe all stored access logs to maintain privacy and free up space.</li>
-                <li><strong>📥 Download Logs as CSV:</strong> Export all access logs into a CSV file for easy backup or review.</li>
-            </ul>
-        </div>
     </div>
-    <!-- 📧 Contact Section -->
-    <div class="container my-5" id="Contact">
-        <div class="card p-4 text-center">
-            <h3>📞 Contact Us</h3>
-            <p>If you have any questions, suggestions, or need support, feel free to reach out to us.</p>
-            <p>📧 Email: <a href="mailto:dogetpost@gmail.com">dogetpost@gmail.com</a></p>
-            <h5>Office Address</h5>
-            <p>
-              GetPost <br />
-              Mukhi Vas, At & Po-Mauchha, Ta-Prantij,<br />
-              Dist-Sabarkantha, State-Gujarat, India-383210
-            </p>
-        </div>
-    </div>    
-    <footer>
-        <p>&copy; 2025 Inbox Sweeper. All Rights Reserved. | 
-            <a href="privacy.html" class="text-light">Privacy Policy</a> | 
-            <a href="terms.html" class="text-light">Terms of Service</a></p>
-    </footer>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Button Functionality -->
+  <div class="container my-5">
+    <div class="card p-4">
+      <h4>🛠️ Button Functionality</h4>
+      <ul>
+        <li><strong>📥 Extract Unique Emails:</strong> Get all sender emails in your inbox.</li>
+        <li><strong>🗑 Bulk Delete:</strong> Trash emails by selected sender.</li>
+        <li><strong>📂 Export CSV:</strong> Download all unique email addresses.</li>
+        <li><strong>⚪ Filter Button:</strong> Pick specific email ID for actions.</li>
+        <li><strong>📤 Unsubscribe Links:</strong> Auto-detect and display email opt-out links.</li>
+        <li><strong>📜 View Logs:</strong> Track what actions you've taken.</li>
+        <li><strong>🧹 Clear Logs:</strong> Erase all stored history in one click.</li>
+        <li><strong>📥 Download Logs:</strong> Export logs as CSV for backup.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Contact -->
+  <div class="container my-5" id="Contact">
+    <div class="card p-4 text-center">
+      <h4>📞 Contact Us</h4>
+      <p>Questions or feedback? We’d love to hear from you.</p>
+      <p>Email: <a href="mailto:dogetpost@gmail.com">dogetpost@gmail.com</a></p>
+      <h5>Office Address</h5>
+      <p>
+        GetPost <br />
+        Mukhi Vas, At & Po-Mauchha, Ta-Prantij,<br />
+        Dist-Sabarkantha, Gujarat, India - 383210
+      </p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p class="mb-0">
+      &copy; 2025 Inbox Sweeper. All Rights Reserved. | 
+      <a href="privacy.html" class="text-light">Privacy Policy</a> | 
+      <a href="terms.html" class="text-light">Terms of Service</a>
+    </p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

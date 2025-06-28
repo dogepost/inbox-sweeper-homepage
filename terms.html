@@ -28,7 +28,7 @@
     </nav>
     <div class="container">
         <h1 class="mb-4">Terms of Service</h1>
-        <p><strong>Effective Date: 16-03-2025</strong></p>
+        <p><strong>Effective Date: 29-06-2025</strong></p>
         
         <h3>1. Introduction</h3>
         <p>Welcome to Inbox Sweeper! These Terms of Service ("Terms") govern your use of the Inbox Sweeper Chrome extension. By installing and using this extension, you agree to comply with these Terms. If you do not agree, please do not use the extension.</p>
@@ -39,8 +39,6 @@
             <li>Extracting all unique email IDs list.</li>
             <li>Deleting all emails of selected email ID.</li>
             <li>Exporting all unique email IDs as CSV file.</li>
-            <li>Checkbox option to filter emails and bulk actions.</li>
-            <li>Bulk unsubscribing from unwanted emails.</li>
         </ul>
         <p>This extension requires access to your Gmail inbox through Google's OAuth authentication.</p>
         
@@ -67,16 +65,46 @@
         <h3>6. Disclaimer of Warranties</h3>
         <p>Inbox Sweeper is provided "as is" without warranties of any kind, either expressed or implied. We do not guarantee uninterrupted or error-free service and are not responsible for any issues caused by Gmail API changes or user misuse.</p>
         
-        <h3>7. Limitation of Liability</h3>
+        <h3>7. WhatsApp PDF Delivery Feature</h3>
+        <p>
+        Inbox Sweeper offers an optional automation feature that allows users to receive PDF versions of their latest Gmail emails directly to their WhatsApp number via the <strong>WhatsApp Cloud API</strong>.
+        </p>
+
+        <h4>7.1 Feature Overview</h4>
+        <ul>
+        <li>✅ The extension captures incoming Gmail messages in print format and converts them into PDFs using <code>html2canvas</code> and <code>jsPDF</code>.</li>
+        <li>✅ These PDFs are then sent to the user’s verified WhatsApp number via an API integration.</li>
+        <li>✅ The user must explicitly enable this feature from the extension UI and complete OTP-based mobile number verification.</li>
+        </ul>
+
+        <h4>7.2 User Responsibilities</h4>
+        <ul>
+        <li>📲 Users are responsible for providing a valid WhatsApp number for verification via OTP.</li>
+        <li>🔄 Users must ensure they are compliant with WhatsApp’s terms and conditions before using this feature.</li>
+        <li>📤 Users acknowledge that email content is converted and sent only upon receiving new emails and only to their verified number.</li>
+        </ul>
+
+        <h4>7.3 Privacy & Data Handling</h4>
+        <ul>
+        <li>🔐 No email content, PDF, or WhatsApp number is stored on external servers.</li>
+        <li>🔒 WhatsApp API tokens are securely fetched using a Cloudflare Worker proxy and are never exposed or persisted in browser storage.</li>
+        <li>🚫 We do not log, analyze, or share any PDFs generated or sent via WhatsApp.</li>
+        </ul>
+
+        <p>
+        By enabling this feature, you agree to use it responsibly and understand that it is strictly opt-in and privacy-preserving. You may disable it at any time via the extension settings.
+        </p>
+
+        <h3>8. Limitation of Liability</h3>
         <p>To the fullest extent permitted by law, Inbox Sweeper and its developers shall not be liable for any damages, including but not limited to loss of data, unauthorized access, or technical failures.</p>
         
-        <h3>8. Changes to These Terms</h3>
+        <h3>9. Changes to These Terms</h3>
         <p>We may update these Terms from time to time. Continued use of the extension after changes means you accept the revised Terms.</p>
         
-        <h3>9. Termination</h3>
+        <h3>10. Termination</h3>
         <p>We reserve the right to terminate or suspend access to Inbox Sweeper if you violate these Terms.</p>
         
-        <h3>10. Contact Us</h3>
+        <h3>11. Contact Us</h3>
         <p>If you have any questions about these Terms, please contact us at:</p>
         <p>📧 Email: <a href="mailto:dogetpost@gmail.com">dogetpost@gmail.com</a></p>
     </div>
