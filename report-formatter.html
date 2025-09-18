@@ -2,7 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Report Formatter</title>
+  <title>Report Formatter | Online CSV, Excel & PDF Report Generator</title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Report Formatter is a free online tool to upload CSV/Excel, edit tables, reorder columns, change headers, and export to CSV, Excel, or PDF with professional formatting.">
+  <meta name="keywords" content="report formatter, csv to excel, excel to pdf, csv editor online, excel formatter, data table editor, export csv excel pdf, report generator tool, online csv editor, excel formatting tool">
+  <meta name="author" content="Report Formatter Team">
+
+  <!-- Mobile Responsive -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Robots (Allow Indexing) -->
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph for Social Media -->
+  <meta property="og:title" content="Report Formatter | Online CSV, Excel & PDF Report Generator" />
+  <meta property="og:description" content="Easily upload CSV/Excel, edit, reorder, and export reports in CSV, Excel, or PDF with page numbers & professional formatting." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://inboxsweeper.xyz/report-formatter.html" />
+  <meta property="og:image" content="https://inboxsweeper.xyz/GP-logo.png" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Report Formatter | Online CSV, Excel & PDF Report Generator">
+  <meta name="twitter:description" content="Free online tool to edit & format CSV/Excel and export professional reports.">
+  <meta name="twitter:image" content="https://inboxsweeper.xyz/GP-logo.png">
+
+  <!-- Structured Data (Schema.org JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Report Formatter",
+    "url": "https://inboxsweeper.xyz/report-formatter.html",
+    "description": "Free online tool to upload, edit, and format CSV/Excel files and export them as CSV, Excel, or PDF reports.",
+    "applicationCategory": "Utility",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
@@ -135,6 +178,14 @@
       font-size: 14px;
       font-weight: bold;
     }
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #2c3e50;
+      color: white;
+      margin-top: 30px;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
@@ -199,16 +250,17 @@ function handleFile(e) {
 }
 </script>
 
+<div class="controls">
+  <button class="btn" onclick="downloadCSV()">Download CSV</button>
+  <button class="btn" onclick="downloadExcel()">Download Excel</button>
+  <button class="btn" onclick="downloadPDF()">Download PDF</button>
+</div>
 
-  <div class="controls">
-    <button class="btn" onclick="downloadCSV()">Download CSV</button>
-    <button class="btn" onclick="downloadExcel()">Download Excel</button>
-    <button class="btn" onclick="downloadPDF()">Download PDF</button>
-  </div>
+<p id="tip">💡Tip: Drag and Drop column headers to reorder them</p>
 
-  <p id="tip">💡Tip: Drag and Drop column headers to reorder them</p>
-  
-  <section style="max-width: 800px; margin: 40px auto; font-family: Arial, sans-serif;">
+<div id="tableContainer"></div>
+
+<section style="max-width: 800px; margin: 40px auto; font-family: Arial, sans-serif;">
   <h2 style="text-align: center; font-size: 26px; margin-bottom: 20px;">📝 Report Formatter – Features</h2>
   <ul style="list-style: none; padding: 0; font-size: 16px; line-height: 1.8;">
     <li>📂 Upload CSV or Excel files easily.</li>
@@ -225,8 +277,6 @@ function handleFile(e) {
     <li>⚠️ Error message if invalid file type is uploaded.</li>
   </ul>
 </section>
-
-  <div id="tableContainer"></div>
 
 <script>
 let tableData = [];          
@@ -436,6 +486,8 @@ function downloadPDF() {
   doc.save("report.pdf");
 }
 </script>
-  
+<footer>
+    © 2025 Report Formatter. All Rights Reserved.
+</footer>
 </body>
 </html>
