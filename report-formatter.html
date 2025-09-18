@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Report Formatter</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9fafc;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+
+    label {
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    input[type="file"], input[type="text"] {
+      margin: 10px 0;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .controls {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .btn {
+      background: #3498db;
+      border: none;
+      color: #fff;
+      padding: 8px 15px;
+      margin: 5px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #2980b9;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      border: 1px solid #e0e0e0;
+      padding: 8px 10px;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f4f6f8;
+      cursor: move;
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) td {
+      background: #fafafa;
+    }
+
+    tr:hover td {
+      background: #f1f7ff;
+    }
+
+    th input {
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 2px 4px;
+      font-size: 13px;
+      width: 90px;
+    }
+
+    th button {
+      margin-left: 3px;
+      padding: 2px 5px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      background: #ecf0f1;
+      transition: background 0.2s ease;
+    }
+
+    th button:hover {
+      background: #dcdcdc;
+    }
+
+    .delete-btn {
+      color: #e74c3c;
+      cursor: pointer;
+      font-weight: bold;
+      margin-left: 5px;
+      transition: color 0.3s ease;
+    }
+
+    .delete-btn:hover {
+      color: #c0392b;
+    }
+
+    #tableContainer {
+      margin-top: 20px;
+      overflow-x: auto;
+    }
+
+    #tip{
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: #e9f7ef;
+      border: 1px solid #27ae60;
+      border-radius: 5px;
+      color: #2d7a46;
+      font-size: 14px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>📊 Report Formatter</h2>
+  
+  <label>Report Title:</label>
+  <input type="text" id="reportTitle" placeholder="Enter report title..." style="width:250px;" /><br>
+
+  <input type="file" id="fileInput" accept=".csv, .xlsx, .xls" />
+<p id="errorMsg" style="color: red; font-weight: bold; margin-top: 8px;"></p>
+
+<script>
+document.getElementById("fileInput").addEventListener("change", handleFile);
+
+function handleFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const errorMsg = document.getElementById("errorMsg");
+  errorMsg.textContent = ""; // Clear old error
+
+  const allowedExtensions = [".csv", ".xlsx", ".xls"];
+  const fileName = file.name.toLowerCase();
+  const isValid = allowedExtensions.some(ext => fileName.endsWith(ext));
+
+  if (!isValid) {
+    errorMsg.textContent = "❌ Invalid file type! Please upload a CSV or Excel file (.csv, .xlsx, .xls).";
+    e.target.value = ""; // Reset file input
+    return;
+  }
+
+  const reader = new FileReader();
+  if (fileName.endsWith(".csv")) {
+    reader.onload = (evt) => {
+      const rows = evt.target.result.split(/\r?\n/).filter(r => r.trim()).map(r => r.split(","));
+      columnKeys = rows[0].map((_, i) => "col" + i);
+      columnHeaders = [...rows[0]];
+      tableData = rows.slice(1).map(r => {
+        let obj = {};
+        columnKeys.forEach((key, i) => obj[key] = r[i] || "");
+        return obj;
+      });
+      renderTable();
+    };
+    reader.readAsText(file);
+  } else {
+    reader.onload = (evt) => {
+      const workbook = XLSX.read(evt.target.result, { type: "binary" });
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+      columnKeys = rows[0].map((_, i) => "col" + i);
+      columnHeaders = [...rows[0]];
+      tableData = rows.slice(1).map(r => {
+        let obj = {};
+        columnKeys.forEach((key, i) => obj[key] = r[i] || "");
+        return obj;
+      });
+      renderTable();
+    };
+    reader.readAsBinaryString(file);
+  }
+}
+</script>
+
+
+  <div class="controls">
+    <button class="btn" onclick="downloadCSV()">Download CSV</button>
+    <button class="btn" onclick="downloadExcel()">Download Excel</button>
+    <button class="btn" onclick="downloadPDF()">Download PDF</button>
+  </div>
+
+  <p id="tip">💡Tip: Drag and Drop column headers to reorder them</p>
+  
+  <section style="max-width: 800px; margin: 40px auto; font-family: Arial, sans-serif;">
+  <h2 style="text-align: center; font-size: 26px; margin-bottom: 20px;">📝 Report Formatter – Features</h2>
+  <ul style="list-style: none; padding: 0; font-size: 16px; line-height: 1.8;">
+    <li>📂 Upload CSV or Excel files easily.</li>
+    <li>🖊️ Add a custom report title (included in all exports).</li>
+    <li>📋 View your data in a clean, editable table.</li>
+    <li>🔤 Edit column headers and change text case (UPPER, lower, Capitalize).</li>
+    <li>↔️ Drag & drop columns to reorder instantly.</li>
+    <li>➕ Auto-added serial number column for clarity.</li>
+    <li>❌ Delete any row or column with one click.</li>
+    <li>✍️ Edit cell values directly in the table.</li>
+    <li>⬇️ Export formatted data to <b>CSV, Excel, or PDF</b>.</li>
+    <li>📐 PDF auto-adjusts orientation (portrait/landscape) based on columns.</li>
+    <li>📄 Page numbers included in PDF exports.</li>
+    <li>⚠️ Error message if invalid file type is uploaded.</li>
+  </ul>
+</section>
+
+  <div id="tableContainer"></div>
+
+<script>
+let tableData = [];          
+let columnKeys = [];         
+let columnHeaders = [];      
+
+// ===== File Upload =====
+document.getElementById("fileInput").addEventListener("change", handleFile);
+
+function handleFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  if (file.name.endsWith(".csv")) {
+    reader.onload = (evt) => {
+      const rows = evt.target.result.split(/\r?\n/).filter(r => r.trim()).map(r => r.split(","));
+      columnKeys = rows[0].map((_, i) => "col" + i);
+      columnHeaders = [...rows[0]];
+      tableData = rows.slice(1).map(r => {
+        let obj = {};
+        columnKeys.forEach((key, i) => obj[key] = r[i] || "");
+        return obj;
+      });
+      renderTable();
+    };
+    reader.readAsText(file);
+  } else {
+    reader.onload = (evt) => {
+      const workbook = XLSX.read(evt.target.result, { type: "binary" });
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+      columnKeys = rows[0].map((_, i) => "col" + i);
+      columnHeaders = [...rows[0]];
+      tableData = rows.slice(1).map(r => {
+        let obj = {};
+        columnKeys.forEach((key, i) => obj[key] = r[i] || "");
+        return obj;
+      });
+      renderTable();
+    };
+    reader.readAsBinaryString(file);
+  }
+}
+
+// ===== Render Table =====
+function renderTable() {
+  let html = "<table id='dataTable'><thead><tr>";
+  html += "<th>#</th>";
+  columnHeaders.forEach((h, i) => {
+    html += `<th draggable="true" ondragstart="drag(event, ${i})" ondrop="drop(event, ${i})" ondragover="allowDrop(event)">
+      <input value="${h}" onchange="editHeader(${i}, this.value)" style="width:90px" />
+      <button onclick="setCase(${i},'upper')">A↑</button>
+      <button onclick="setCase(${i},'lower')">a↓</button>
+      <button onclick="setCase(${i},'capitalize')">Aa</button>
+      <span class="delete-btn" onclick="deleteColumn(${i})">✖</span>
+    </th>`;
+  });
+  html += "<th>Delete Row</th></tr></thead><tbody>";
+
+  tableData.forEach((row, rIdx) => {
+    html += `<tr><td>${rIdx + 1}</td>`;
+    columnKeys.forEach((key) => {
+      html += `<td contenteditable="true" oninput="updateCell(${rIdx},'${key}',this.innerText)">${row[key]}</td>`;
+    });
+    html += `<td><span class="delete-btn" onclick="deleteRow(${rIdx})">✖</span></td></tr>`;
+  });
+  html += "</tbody></table>";
+  document.getElementById("tableContainer").innerHTML = html;
+}
+
+// ===== Edit Header =====
+function editHeader(colIdx, newVal) {
+  columnHeaders[colIdx] = newVal;
+  renderTable();
+}
+
+// ===== Update Cell =====
+function updateCell(rIdx, key, val) {
+  tableData[rIdx][key] = val;
+}
+
+// ===== Transform Case =====
+function setCase(colIdx, type) {
+  let key = columnKeys[colIdx];
+  tableData.forEach(row => {
+    if (!row[key]) return;
+    if (type === "upper") row[key] = row[key].toUpperCase();
+    else if (type === "lower") row[key] = row[key].toLowerCase();
+    else if (type === "capitalize") row[key] = row[key].charAt(0).toUpperCase() + row[key].slice(1).toLowerCase();
+  });
+  renderTable();
+}
+
+// ===== Delete Column =====
+function deleteColumn(colIdx) {
+  let key = columnKeys[colIdx];
+  columnKeys.splice(colIdx, 1);
+  columnHeaders.splice(colIdx, 1);
+  tableData.forEach(row => delete row[key]);
+  renderTable();
+}
+
+// ===== Delete Row =====
+function deleteRow(rIdx) {
+  tableData.splice(rIdx, 1);
+  renderTable();
+}
+
+// ===== Drag/Drop Column Reorder =====
+let draggedCol;
+function drag(ev, colIdx) { draggedCol = colIdx; }
+function allowDrop(ev) { ev.preventDefault(); }
+function drop(ev, targetIdx) {
+  if (draggedCol === targetIdx) return;
+  [columnKeys[draggedCol], columnKeys[targetIdx]] = [columnKeys[targetIdx], columnKeys[draggedCol]];
+  [columnHeaders[draggedCol], columnHeaders[targetIdx]] = [columnHeaders[targetIdx], columnHeaders[draggedCol]];
+  renderTable();
+}
+
+// ===== Export Functions =====
+function downloadCSV() {
+  const title = document.getElementById("reportTitle").value || "Report";
+
+  // Helper: Escape values for CSV
+  function escapeCSV(val) {
+    if (val == null) return "";
+    val = String(val);
+    if (/[",\n]/.test(val)) {
+      return '"' + val.replace(/"/g, '""') + '"';
+    }
+    return val;
+  }
+
+  // Build rows
+  let csvRows = [];
+  csvRows.push(title); // Title line
+  csvRows.push(["Sr. No.", ...columnHeaders].map(escapeCSV).join(",")); // Headers
+
+  tableData.forEach((row, i) => {
+    const rowArr = [i + 1, ...columnKeys.map(k => row[k])];
+    csvRows.push(rowArr.map(escapeCSV).join(","));
+  });
+
+  // Create and trigger download
+  const blob = new Blob([csvRows.join("\n")], { type: "text/csv;charset=utf-8;" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "report.csv";
+  link.style.display = "none";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function downloadExcel() {
+  const title = document.getElementById("reportTitle").value || "Report";
+  const rows = [[title], ["Sr. No.", ...columnHeaders]];
+  tableData.forEach((row, i) => rows.push([i+1, ...columnKeys.map(k => row[k])]));
+  
+  const ws = XLSX.utils.aoa_to_sheet(rows);
+
+  // Merge first row across all columns
+  const range = XLSX.utils.decode_range(ws['!ref']);
+  const lastCol = range.e.c;
+  ws['!merges'] = ws['!merges'] || [];
+  ws['!merges'].push({ s: { r:0, c:0 }, e: { r:0, c:lastCol } });
+
+  // Center + bold title
+  ws["A1"].s = { font: { bold: true }, alignment: { horizontal: "center" } };
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Report");
+  XLSX.writeFile(wb, "report.xlsx");
+}
+
+function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+  const cols = ["Sr. No.", ...columnHeaders];
+  const rows = tableData.map((row,i) => [i+1, ...columnKeys.map(k => row[k])]);
+
+  const orientation = cols.length > 6 ? "landscape" : "portrait";
+  const doc = new jsPDF({ orientation });
+
+  const title = document.getElementById("reportTitle").value || "Report";
+  doc.setFontSize(16);
+  doc.text(title, doc.internal.pageSize.getWidth() / 2, 15, { align: "center" });
+
+  doc.autoTable({
+    head: [cols],
+    body: rows,
+    startY: 25,
+    didDrawPage: function (data) {
+      let pageCount = doc.internal.getNumberOfPages();
+      let pageSize = doc.internal.pageSize;
+      let pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight();
+      doc.setFontSize(10);
+      doc.text(
+        "Page " + doc.internal.getCurrentPageInfo().pageNumber + " of " + pageCount,
+        pageSize.width / 2,
+        pageHeight - 10,
+        { align: "center" }
+      );
+    }
+  });
+
+  doc.save("report.pdf");
+}
+</script>
+  
+</body>
+</html>
