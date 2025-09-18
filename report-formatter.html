@@ -195,6 +195,7 @@
       overflow-x: auto;
       -webkit-overflow-scrolling: touch; /* smooth mobile scroll */
     }
+
   </style>
 </head>
 <body>
@@ -204,10 +205,40 @@
   <input type="text" id="reportTitle" placeholder="Enter report title..." style="width:250px;" /><br>
 
   <input type="file" id="fileInput" accept=".csv, .xlsx, .xls" />
-<p id="errorMsg" style="color: red; font-weight: bold; margin-top: 8px;"></p>
+  <p id="errorMsg" style="color: red; font-weight: bold; margin-top: 8px;"></p>
+  
+<!-- Loader -->
+<div id="loader" 
+     style="display:none; 
+            position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(255,255,255,0.8); 
+            justify-content:center; align-items:center; 
+            font-size:20px; font-weight:bold; color:#333; z-index:9999;">
+  <div>
+    <div class="spinner" 
+         style="border:6px solid #f3f3f3; border-top:6px solid #3498db; border-radius:50%; width:40px; height:40px; animation:spin 1s linear infinite; margin:auto;">
+    </div>
+    <p style="margin-top:10px; text-align:center;">Please wait...</p>
+  </div>
+</div>
+
+<style>
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
 
 <script>
 document.getElementById("fileInput").addEventListener("change", handleFile);
+
+function showLoader() {
+  document.getElementById("loader").style.display = "flex"; // Show loader
+}
+
+function hideLoader() {
+  document.getElementById("loader").style.display = "none"; // Hide loader
+}
 
 function handleFile(e) {
   const file = e.target.files[0];
@@ -226,38 +257,53 @@ function handleFile(e) {
     return;
   }
 
+  showLoader(); // 🔹 Show loader while processing
+
   const reader = new FileReader();
   if (fileName.endsWith(".csv")) {
     reader.onload = (evt) => {
-      const rows = evt.target.result.split(/\r?\n/).filter(r => r.trim()).map(r => r.split(","));
-      columnKeys = rows[0].map((_, i) => "col" + i);
-      columnHeaders = [...rows[0]];
-      tableData = rows.slice(1).map(r => {
-        let obj = {};
-        columnKeys.forEach((key, i) => obj[key] = r[i] || "");
-        return obj;
-      });
-      renderTable();
+      try {
+        const rows = evt.target.result.split(/\r?\n/).filter(r => r.trim()).map(r => r.split(","));
+        columnKeys = rows[0].map((_, i) => "col" + i);
+        columnHeaders = [...rows[0]];
+        tableData = rows.slice(1).map(r => {
+          let obj = {};
+          columnKeys.forEach((key, i) => obj[key] = r[i] || "");
+          return obj;
+        });
+        renderTable();
+      } catch (err) {
+        errorMsg.textContent = "⚠️ Error reading CSV file.";
+      } finally {
+        hideLoader(); // 🔹 Always hide loader
+      }
     };
     reader.readAsText(file);
   } else {
     reader.onload = (evt) => {
-      const workbook = XLSX.read(evt.target.result, { type: "binary" });
-      const sheet = workbook.Sheets[workbook.SheetNames[0]];
-      const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-      columnKeys = rows[0].map((_, i) => "col" + i);
-      columnHeaders = [...rows[0]];
-      tableData = rows.slice(1).map(r => {
-        let obj = {};
-        columnKeys.forEach((key, i) => obj[key] = r[i] || "");
-        return obj;
-      });
-      renderTable();
+      try {
+        const workbook = XLSX.read(evt.target.result, { type: "binary" });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+        columnKeys = rows[0].map((_, i) => "col" + i);
+        columnHeaders = [...rows[0]];
+        tableData = rows.slice(1).map(r => {
+          let obj = {};
+          columnKeys.forEach((key, i) => obj[key] = r[i] || "");
+          return obj;
+        });
+        renderTable();
+      } catch (err) {
+        errorMsg.textContent = "⚠️ Error reading Excel file.";
+      } finally {
+        hideLoader(); // 🔹 Always hide loader
+      }
     };
     reader.readAsBinaryString(file);
   }
 }
 </script>
+
 
 <div class="controls">
   <button class="btn" onclick="downloadCSV()">Download CSV</button>
@@ -408,91 +454,112 @@ function drop(ev, targetIdx) {
 
 // ===== Export Functions =====
 function downloadCSV() {
-  const title = document.getElementById("reportTitle").value || "Report";
+  showLoader("Preparing CSV...");
+  setTimeout(() => {
+    try {
+      const title = document.getElementById("reportTitle").value || "Report";
 
-  // Helper: Escape values for CSV
-  function escapeCSV(val) {
-    if (val == null) return "";
-    val = String(val);
-    if (/[",\n]/.test(val)) {
-      return '"' + val.replace(/"/g, '""') + '"';
+      function escapeCSV(val) {
+        if (val == null) return "";
+        val = String(val);
+        if (/[",\n]/.test(val)) {
+          return '"' + val.replace(/"/g, '""') + '"';
+        }
+        return val;
+      }
+
+      let csvRows = [];
+      csvRows.push(title);
+      csvRows.push(["Sr. No.", ...columnHeaders].map(escapeCSV).join(","));
+      tableData.forEach((row, i) => {
+        const rowArr = [i + 1, ...columnKeys.map(k => row[k])];
+        csvRows.push(rowArr.map(escapeCSV).join(","));
+      });
+
+      const blob = new Blob([csvRows.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "report.csv";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (err) {
+      alert("❌ CSV download failed.");
+      console.error(err);
+    } finally {
+      hideLoader();
     }
-    return val;
-  }
-
-  // Build rows
-  let csvRows = [];
-  csvRows.push(title); // Title line
-  csvRows.push(["Sr. No.", ...columnHeaders].map(escapeCSV).join(",")); // Headers
-
-  tableData.forEach((row, i) => {
-    const rowArr = [i + 1, ...columnKeys.map(k => row[k])];
-    csvRows.push(rowArr.map(escapeCSV).join(","));
-  });
-
-  // Create and trigger download
-  const blob = new Blob([csvRows.join("\n")], { type: "text/csv;charset=utf-8;" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "report.csv";
-  link.style.display = "none";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  }, 100); // ⏳ allow loader to show first
 }
 
 function downloadExcel() {
-  const title = document.getElementById("reportTitle").value || "Report";
-  const rows = [[title], ["Sr. No.", ...columnHeaders]];
-  tableData.forEach((row, i) => rows.push([i+1, ...columnKeys.map(k => row[k])]));
-  
-  const ws = XLSX.utils.aoa_to_sheet(rows);
+  showLoader("Preparing Excel...");
+  setTimeout(() => {
+    try {
+      const title = document.getElementById("reportTitle").value || "Report";
+      const rows = [[title], ["Sr. No.", ...columnHeaders]];
+      tableData.forEach((row, i) => rows.push([i + 1, ...columnKeys.map(k => row[k])]));
 
-  // Merge first row across all columns
-  const range = XLSX.utils.decode_range(ws['!ref']);
-  const lastCol = range.e.c;
-  ws['!merges'] = ws['!merges'] || [];
-  ws['!merges'].push({ s: { r:0, c:0 }, e: { r:0, c:lastCol } });
+      const ws = XLSX.utils.aoa_to_sheet(rows);
+      const range = XLSX.utils.decode_range(ws['!ref']);
+      ws['!merges'] = ws['!merges'] || [];
+      ws['!merges'].push({ s: { r: 0, c: 0 }, e: { r: 0, c: range.e.c } });
 
-  // Center + bold title
-  ws["A1"].s = { font: { bold: true }, alignment: { horizontal: "center" } };
+      ws["A1"].s = { font: { bold: true }, alignment: { horizontal: "center" } };
 
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Report");
-  XLSX.writeFile(wb, "report.xlsx");
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Report");
+      XLSX.writeFile(wb, "report.xlsx");
+    } catch (err) {
+      alert("❌ Excel download failed.");
+      console.error(err);
+    } finally {
+      hideLoader();
+    }
+  }, 100);
 }
 
 function downloadPDF() {
-  const { jsPDF } = window.jspdf;
-  const cols = ["Sr. No.", ...columnHeaders];
-  const rows = tableData.map((row,i) => [i+1, ...columnKeys.map(k => row[k])]);
+  showLoader("Preparing PDF...");
+  setTimeout(() => {
+    try {
+      const { jsPDF } = window.jspdf;
+      const cols = ["Sr. No.", ...columnHeaders];
+      const rows = tableData.map((row, i) => [i + 1, ...columnKeys.map(k => row[k])]);
 
-  const orientation = cols.length > 6 ? "landscape" : "portrait";
-  const doc = new jsPDF({ orientation });
+      const orientation = cols.length > 6 ? "landscape" : "portrait";
+      const doc = new jsPDF({ orientation });
 
-  const title = document.getElementById("reportTitle").value || "Report";
-  doc.setFontSize(16);
-  doc.text(title, doc.internal.pageSize.getWidth() / 2, 15, { align: "center" });
+      const title = document.getElementById("reportTitle").value || "Report";
+      doc.setFontSize(16);
+      doc.text(title, doc.internal.pageSize.getWidth() / 2, 15, { align: "center" });
 
-  doc.autoTable({
-    head: [cols],
-    body: rows,
-    startY: 25,
-    didDrawPage: function (data) {
-      let pageCount = doc.internal.getNumberOfPages();
-      let pageSize = doc.internal.pageSize;
-      let pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight();
-      doc.setFontSize(10);
-      doc.text(
-        "Page " + doc.internal.getCurrentPageInfo().pageNumber + " of " + pageCount,
-        pageSize.width / 2,
-        pageHeight - 10,
-        { align: "center" }
-      );
+      doc.autoTable({
+        head: [cols],
+        body: rows,
+        startY: 25,
+        didDrawPage: function () {
+          const pageCount = doc.internal.getNumberOfPages();
+          const pageSize = doc.internal.pageSize;
+          const pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight();
+          doc.setFontSize(10);
+          doc.text(
+            "Page " + doc.internal.getCurrentPageInfo().pageNumber + " of " + pageCount,
+            pageSize.width / 2,
+            pageHeight - 10,
+            { align: "center" }
+          );
+        }
+      });
+
+      doc.save("Report.pdf");
+    } catch (err) {
+      alert("❌ PDF download failed.");
+      console.error(err);
+    } finally {
+      hideLoader();
     }
-  });
-
-  doc.save("report.pdf");
+  }, 100);
 }
 </script>
 <footer>
@@ -500,5 +567,3 @@ function downloadPDF() {
 </footer>
 </body>
 </html>
-
-
