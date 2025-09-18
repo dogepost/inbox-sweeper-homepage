@@ -186,6 +186,15 @@
       margin-top: 30px;
       font-size: 14px;
     }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 600px; /* ensures multiple columns render */
+    }
+    .table-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch; /* smooth mobile scroll */
+    }
   </style>
 </head>
 <body>
@@ -491,3 +500,4 @@ function downloadPDF() {
 </footer>
 </body>
 </html>
+
