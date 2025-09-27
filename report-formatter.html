@@ -518,7 +518,6 @@ function downloadExcel() {
     }
   }, 100);
 }
-
 function downloadPDF() {
   showLoader("Preparing PDF...");
   setTimeout(() => {
@@ -530,15 +529,36 @@ function downloadPDF() {
       const orientation = cols.length > 6 ? "landscape" : "portrait";
       const doc = new jsPDF({ orientation });
 
+      // 🔹 Title
       const title = document.getElementById("reportTitle").value || "Report";
       doc.setFontSize(16);
       doc.text(title, doc.internal.pageSize.getWidth() / 2, 15, { align: "center" });
 
+      // 🔹 AutoTable with auto column width & height
       doc.autoTable({
         head: [cols],
         body: rows,
         startY: 25,
+        styles: {
+          fontSize: 10,
+          cellPadding: 3,
+          overflow: "linebreak",   // allow wrapping
+          halign: "left",
+          valign: "middle"
+        },
+        columnStyles: {
+          0: { cellWidth: "auto" } // Sr. No. column auto
+        },
+        tableWidth: "wrap",         // fit to content
+        didParseCell: function (data) {
+          // 🔹 Optional: make header bold
+          if (data.section === "head") {
+            data.cell.styles.fontStyle = "bold";
+            data.cell.styles.halign = "center";
+          }
+        },
         didDrawPage: function () {
+          // 🔹 Footer pagination
           const pageCount = doc.internal.getNumberOfPages();
           const pageSize = doc.internal.pageSize;
           const pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight();
@@ -567,3 +587,4 @@ function downloadPDF() {
 </footer>
 </body>
 </html>
+
