@@ -523,10 +523,27 @@ function downloadPDF() {
   setTimeout(() => {
     try {
       const { jsPDF } = window.jspdf;
-      const cols = ["Sr. No.", ...columnHeaders];
+      const rawHeaders = ["Sr. No.", ...columnHeaders];
+
+      // 🔹 Wrap headers into max 2 lines
+      const wrappedHeaders = rawHeaders.map(h => {
+        if (!h) return "";
+        const words = h.split(" ");
+        let line1 = "";
+        let line2 = "";
+        for (let w of words) {
+          if (line1.length + w.length <= 15) {
+            line1 += (line1 ? " " : "") + w;
+          } else {
+            line2 += (line2 ? " " : "") + w;
+          }
+        }
+        return line2 ? [line1, line2] : [line1]; // max 2 lines
+      });
+
       const rows = tableData.map((row, i) => [i + 1, ...columnKeys.map(k => row[k])]);
 
-      const orientation = cols.length > 6 ? "landscape" : "portrait";
+      const orientation = rawHeaders.length > 6 ? "landscape" : "portrait";
       const doc = new jsPDF({ orientation });
 
       // 🔹 Title
@@ -534,34 +551,32 @@ function downloadPDF() {
       doc.setFontSize(16);
       doc.text(title, doc.internal.pageSize.getWidth() / 2, 15, { align: "center" });
 
-      // 🔹 AutoTable with auto column width & height
+      // 🔹 AutoTable with adjusted header + content
       doc.autoTable({
-        head: [cols],
+        head: [wrappedHeaders],
         body: rows,
         startY: 25,
         styles: {
-          fontSize: 10,
+          fontSize: 9,
           cellPadding: 3,
-          overflow: "linebreak",   // allow wrapping
+          overflow: "linebreak",
           halign: "left",
           valign: "middle"
         },
         columnStyles: {
-          0: { cellWidth: "auto" } // Sr. No. column auto
+          0: { cellWidth: "auto", halign: "center" } // Sr. No.
         },
-        tableWidth: "wrap",         // fit to content
+        tableWidth: "auto", // use available width
         didParseCell: function (data) {
-          // 🔹 Optional: make header bold
           if (data.section === "head") {
             data.cell.styles.fontStyle = "bold";
             data.cell.styles.halign = "center";
           }
         },
         didDrawPage: function () {
-          // 🔹 Footer pagination
           const pageCount = doc.internal.getNumberOfPages();
           const pageSize = doc.internal.pageSize;
-          const pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight();
+          const pageHeight = pageSize.height || pageSize.getHeight();
           doc.setFontSize(10);
           doc.text(
             "Page " + doc.internal.getCurrentPageInfo().pageNumber + " of " + pageCount,
@@ -587,4 +602,5 @@ function downloadPDF() {
 </footer>
 </body>
 </html>
+
 
