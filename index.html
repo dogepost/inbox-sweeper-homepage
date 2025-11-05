@@ -112,27 +112,31 @@
       🌟 Get the Extension
     </a>
   </div>
-  <div id="paypal-button-container-P-7TB38841RF3266308NEFWXOY"></div>
-<script src="https://www.paypal.com/sdk/js?client-id=AQf-U-LKwyjgX2OxSBv5Vz4o8aZEA90U8qR1RpQ1Dhx_JzBzhYpYPNUogAREjEoWuZGDynMxC8i5F2co&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
+  <button id="subscribeBtn">Subscribe Now</button>
 <script>
-  paypal.Buttons({
-      style: {
-          shape: 'rect',
-          color: 'gold',
-          layout: 'vertical',
-          label: 'subscribe'
-      },
-      createSubscription: function(data, actions) {
-        return actions.subscription.create({
-          /* Creates the subscription */
-          plan_id: 'P-7TB38841RF3266308NEFWXOY'
-        });
-      },
-      onApprove: function(data, actions) {
-        alert(data.subscriptionID); // You can add optional success message for the subscriber here
-      }
-  }).render('#paypal-button-container-P-7TB38841RF3266308NEFWXOY'); // Renders the PayPal button
+document.getElementById("subscribeBtn").addEventListener("click", async () => {
+  const userEmail = document.getElementById("email").value;
+
+  const res = await fetch("https://your-worker.workers.dev/create-subscription", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      email: userEmail,
+      return_url: "https://yourdomain.com/success",
+      cancel_url: "https://yourdomain.com/cancel"
+    })
+  });
+
+  const j = await res.json();
+
+  if (j.approveLink) {
+    window.open(j.approveLink, "_blank");
+  } else {
+    alert("Error creating subscription: " + j.error);
+  }
+});
 </script>
+
 </section>
 
   <!-- Features Section -->
