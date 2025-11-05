@@ -112,33 +112,7 @@
       🌟 Get the Extension
     </a>
   </div>
-  <button id="subscribeBtn">Subscribe Now</button>
-<script>
-document.getElementById("subscribeBtn").addEventListener("click", async () => {
-  const userEmail = document.getElementById("email").value;
-
-  const res = await fetch("https://your-worker.workers.dev/create-subscription", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      email: userEmail,
-      return_url: "https://yourdomain.com/success",
-      cancel_url: "https://yourdomain.com/cancel"
-    })
-  });
-
-  const j = await res.json();
-
-  if (j.approveLink) {
-    window.open(j.approveLink, "_blank");
-  } else {
-    alert("Error creating subscription: " + j.error);
-  }
-});
-</script>
-
 </section>
-
   <!-- Features Section -->
   <div class="container my-5">
     <div class="row g-4">
@@ -316,3 +290,4 @@ document.getElementById("subscribeBtn").addEventListener("click", async () => {
 </body>
 
 </html>
+
