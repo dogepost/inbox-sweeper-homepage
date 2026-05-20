@@ -96,7 +96,22 @@
 
             <label for="message">Message</label>
             <textarea id="message" name="Message" rows="6" required></textarea>
+            <!-- Privacy Agreement -->
+            <div style="margin: 15px 0; display: flex; align-items: flex-start; gap: 10px;">
+                <input 
+                    type="checkbox" 
+                    id="privacyAgreement" 
+                    required 
+                    style="margin-top: 5px;"
+                />
 
+                <label for="privacyAgreement" style="font-size: 14px; line-height: 1.6;">
+                    I agree that the information submitted through this contact form 
+                    (such as my name, email address, and message) may be collected 
+                    and used to respond to my inquiry in accordance with the 
+                    <a href="Privacy Policy.html" target="_blank">Privacy Policy</a>.
+                </label>
+            </div>
             <button type="submit">Send Message</button>
         </form>        
   </div>
